@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.etsy_tokens.json
+
+# Third-party art: license forbids redistribution (see README credits)
+assets/

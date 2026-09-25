@@ -38,7 +38,7 @@ def poll_sales():
         new_sale = sale_source.get_new_sales()
         if new_sale:
             alert_queue.put(new_sale[0])
-        sleep(1)
+        sleep(sale_source.poll_seconds)
 
 def check_for_sales():
     """
