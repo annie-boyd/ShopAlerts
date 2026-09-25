@@ -1,15 +1,14 @@
+import os
 import subprocess
+
+SOUND = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sounds", "alert.wav")
 
 
 def notify(sale) -> None:
   """
-  Play a sound and show a short popup animation for a new sale.
+  Play an alert sound for a new sale.
 
-  Show a small popup window with the sale info that appears briefly then goes away on its own 
- 
+  Uses Popen instead of run so the sound plays in the background and
+  the popup animation doesn't freeze while it plays.
   """
-
-  #plays an alert sound for a new sale
-  subprocess.run(["afplay", "sounds/alert.wav"])
-
-  
+  subprocess.Popen(["afplay", SOUND])

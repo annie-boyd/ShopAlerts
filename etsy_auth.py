@@ -169,14 +169,14 @@ def authorize() -> None:
     }))
     print(f"Tokens saved to {os.path.basename(TOKENS_PATH)}")
 
-    # sanity check: the access token starts with your Etsy user ID, so look up your shop
+    # the access token starts with your Etsy user ID, so look up your shop
     user_id = tokens["access_token"].split(".")[0]
     request = urllib.request.Request(f"{API_BASE}/users/{user_id}/shops",
                                      headers=api_headers(tokens["access_token"]))
     try:
         with urllib.request.urlopen(request) as resp:
-            shop = json.load(resp)
-        print(f"Connected to shop: {shop['shop_name']} (shop_id {shop['shop_id']})")
+            json.load(resp)
+        print("Connected to your Etsy shop.")  
     except urllib.error.HTTPError as e:
         print(f"Tokens are saved, but the shop lookup failed ({e.code}): {e.read().decode()}")
 

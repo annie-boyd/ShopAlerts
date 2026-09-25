@@ -17,6 +17,7 @@ from time import sleep
 import queue
 import tkinter as tk
 from popup import show_popup
+from sale_notifier import notify
 
 alert_queue = queue.Queue()
 
@@ -48,6 +49,7 @@ def check_for_sales():
     while not alert_queue.empty():
         sale = alert_queue.get()
         show_popup(root, sale)
+        notify(sale)
 
     root.after(500, check_for_sales) # reschedule itself to check for sales again in 500ms
     
