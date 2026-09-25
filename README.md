@@ -4,6 +4,13 @@ A small desktop app that alerts you when your Etsy shop makes a sale. When a new
 
 ![ShopAlerts popup: two pixel bears bouncing in front of a shop with "You made a sale!"](docs/demo.gif)
 
+### Demo (with sound!)
+
+
+https://github.com/user-attachments/assets/3d7b11c0-88fc-47ee-8c97-cc1664f171b0
+
+
+
 Right now ShopAlerts uses a **mock sale source**. It makes up sales at random and does not call the Etsy API, so you can demo it without real shop data.
 
 Later updates will include the actual Etsy API.
