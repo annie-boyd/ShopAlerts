@@ -11,3 +11,6 @@ __pycache__/
 
 # Third-party art: license forbids redistribution (see README credits)
 assets/
+
+# Local state: newest Etsy order already alerted for
+.etsy_last_seen.json

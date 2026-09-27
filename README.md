@@ -25,11 +25,19 @@ There are no third-party dependencies.
 
 ## Etsy setup
 
+Before setting up, you'll have to request your key from [Etsy](https://developers.etsy.com/).
+
+After you have your key, follow the directions for initial setup [here](https://developers.etsy.com/documentation/tutorials/quickstart).
+
 1. In your Etsy app settings (in your Etsy developers account), add `http://localhost:3003/callback` as a redirect URI.
 2. Fill in `ETSY_KEYSTRING` and `ETSY_SHARED_SECRET` in `.env` (see `.env.example`). `.env` is gitignored.
 3. Run `python3 etsy_auth.py` once and approve access in the browser. Tokens are saved to `.etsy_tokens.json` (also gitignored) and refresh automatically.
 
 The real source polls every 30 seconds so we don't go over Etsy's daily limit threshold (we're using about 2,880 of the 10,000 daily requests limit). The mock polls every 5 seconds.
+
+If you're interested in adding more fields to this app, Etsy's Open API provides an interface for various features, which you can find [here](https://developers.etsy.com/documentation).
+
+From the Etsy Developers Documentation: Open API v3 supports authenticating via OAuth 2.0.
 
 ## Running
 
@@ -37,7 +45,7 @@ The real source polls every 30 seconds so we don't go over Etsy's daily limit th
 python3 main.py
 ```
 
-The main Tk window stays hidden. A background thread checks for new sales once per polling time (30s for Etsy, 5s if using mock), and the GUI thread picks them up from a queue every 500 ms.
+The main Tk window stays hidden. A background thread checks for new sales once per polling time (30s for Etsy, 5s if using mock), and the GUI thread picks them up from a queue every 500 ms. Note: Although Etsy's API does offer Webhooks, which sends a message when an order is paid, this app would need a server to receive it from. If you'd prefer this method, a small cloud server could receive the webhooks.
 
 ## Project structure
 
@@ -45,7 +53,7 @@ The main Tk window stays hidden. A background thread checks for new sales once p
 | --- | --- |
 | `main.py` | Entry point. Starts the polling thread and the Tk event loop, and passes sales from the queue to the popup. |
 | `sale_source.py` | `SaleSource` abstract base class: the interface for anything that reports new sales. |
-| `mock_source.py` | `MockSaleSource`: returns a fake sale about 20% of the time (random item, buyer and price). |
+| `mock_source.py` | `MockSaleSource`: returns a fake sale about 20% of the time (random buyer and number of items ordered). |
 | `order.py` | `Order` dataclass: `sale_id`, `buyer`, `items`, `total_price`. |
 | `popup.py` | `show_popup(root, sale)`: the sale notification popup. |
 | `sale_notifier.py` | `notify(sale)`: plays `sounds/alert.wav`. |

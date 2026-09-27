@@ -10,8 +10,7 @@
 
  Uses OAuth 2.0 with PKCE, which is what Etsy's API v3 requires.
 
- By: Annie Boyd
- 9-22-2026
+ More information about Etsy's OAuth 2.0 with PKCE can be found at https://developer.etsy.com/documentation/
 """
 import base64
 import hashlib
