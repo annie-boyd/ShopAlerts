@@ -14,7 +14,7 @@ BLINK_MS = 400    # how long the heart stays on (and off)
 GROUND_Y = 356    # bottom of the bear frames on the canvas (feet land on the sidewalk)
 
 FONT = "Pixelify Sans"  # free pixel font from Google Fonts, must be installed on this Mac
-TEXT_COLOR = "#ff7fa6"  # the heart's pink, shifted slightly toward blue
+TEXT_COLOR = "#ff7fa6"  # the heart's pink
 OUTLINE_COLOR = "#fff5db"  # cream from the sky, so the text stands out from the clouds
 TEXT_X, TEXT_Y = 24, 20  # top-left of the message, in the empty sky
 
@@ -57,14 +57,7 @@ def show_popup(root, orders):
         blink(popup, canvas, heart)
 
     # sale message in the sky
-    count = sum(len(order.items) for order in orders)  # items across all the orders
-    items = f"{count} item{'' if count == 1 else 's'}"
-    if len(orders) == 1:
-        title = "You made a sale!"
-        detail = f"{orders[0].buyer} ordered {items}!"
-    else:
-        title = f"You made {len(orders)} sales!"
-        detail = f"{items} in total!"
+    title, detail = popup_text(orders)
     outlined_text(canvas, TEXT_X, TEXT_Y, title, (FONT, 30))
     outlined_text(canvas, TEXT_X, TEXT_Y + 44, detail, (FONT, 21))
 
@@ -78,6 +71,15 @@ def show_popup(root, orders):
         SHOW_MS, lambda: fade(popup, 1.0, 0.0, on_done=popup.destroy)))
 
     return popup
+
+def popup_text(orders):
+    """Return the popup's (title, detail) lines for one order or several combined."""
+    count = sum(len(order.items) for order in orders)  # items across all the orders
+    items = f"{count} item{'' if count == 1 else 's'}"
+    if len(orders) == 1:
+        return "You made a sale!", f"{orders[0].buyer} ordered {items}!"
+    return f"You made {len(orders)} sales!", f"{items} in total!"
+
 
 def fade(popup, start, end, on_done=None, step=0):
     """Change the window's transparency from start to end a little at a time."""
@@ -93,13 +95,13 @@ def fade(popup, start, end, on_done=None, step=0):
 
 def outlined_text(canvas, x, y, text, font):
     """Draw text with a cream outline around it, pixel-art style."""
-    # draw the text in cream, shifted 2px in every direction, to make the outline...
+    # draw the text in cream, shifted 2px in every direction, to make the outline
     for dx in (-2, 0, 2):
         for dy in (-2, 0, 2):
             if dx or dy:
                 canvas.create_text(x + dx, y + dy, text=text, font=font,
                                    fill=OUTLINE_COLOR, anchor="nw")
-    # ...then the real text on top
+    # then the real text on top
     canvas.create_text(x, y, text=text, font=font, fill=TEXT_COLOR, anchor="nw")
 
 
