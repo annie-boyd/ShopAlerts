@@ -18,14 +18,11 @@ TEXT_COLOR = "#ff7fa6"  # the heart's pink, shifted slightly toward blue
 OUTLINE_COLOR = "#fff5db"  # cream from the sky, so the text stands out from the clouds
 TEXT_X, TEXT_Y = 24, 20  # top-left of the message, in the empty sky
 
-def show_popup(root, sale) -> None:
-    """Show a small popup window with sale info that appears briefly
-    and then closes itself.
+def show_popup(root, orders):
+    """Show a small popup window with sale info that appears briefly and then closes itself automatically. 
+    Several orders at once get one combined popup with an order count instead of customer name.
 
-    `root` is the Tk root window created in main.py — this function
-    should NOT create its own Tk() instance, since Tkinter only wants
-    one per program. Build a Toplevel(root) instead.
-
+    Returns the popup window, so the caller can tell when it has closed.
     """
     popup = tk.Toplevel(root)
     popup.overrideredirect(True)  # no title bar
@@ -60,10 +57,16 @@ def show_popup(root, sale) -> None:
         blink(popup, canvas, heart)
 
     # sale message in the sky
-    count = len(sale.items)
-    outlined_text(canvas, TEXT_X, TEXT_Y, "You made a sale!", (FONT, 30))
-    outlined_text(canvas, TEXT_X, TEXT_Y + 44,
-                  f"{sale.buyer} ordered {count} item{'' if count == 1 else 's'}!", (FONT, 21))
+    count = sum(len(order.items) for order in orders)  # items across all the orders
+    items = f"{count} item{'' if count == 1 else 's'}"
+    if len(orders) == 1:
+        title = "You made a sale!"
+        detail = f"{orders[0].buyer} ordered {items}!"
+    else:
+        title = f"You made {len(orders)} sales!"
+        detail = f"{items} in total!"
+    outlined_text(canvas, TEXT_X, TEXT_Y, title, (FONT, 30))
+    outlined_text(canvas, TEXT_X, TEXT_Y + 44, detail, (FONT, 21))
 
     # bottom-right of the screen, 20px from the edges
     x = root.winfo_screenwidth() - width - 20
@@ -73,6 +76,8 @@ def show_popup(root, sale) -> None:
     # fade in, wait, fade out, then close
     fade(popup, 0.0, 1.0, on_done=lambda: popup.after(
         SHOW_MS, lambda: fade(popup, 1.0, 0.0, on_done=popup.destroy)))
+
+    return popup
 
 def fade(popup, start, end, on_done=None, step=0):
     """Change the window's transparency from start to end a little at a time."""

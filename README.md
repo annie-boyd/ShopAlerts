@@ -67,7 +67,7 @@ MockSaleSource ──(poll thread, 5s)──▶ queue ──(Tk main thread, 500
 
 Tkinter must run on the main thread, so polling happens on a separate daemon thread. The two threads communicate through a thread-safe `queue.Queue`, and `root.after()` keeps the GUI checking that queue without blocking.
 
-To connect a real shop, use `SaleSource` in place of `MockSaleSource` in `main.py`.
+To connect a real shop, use `etsy` in place of `mock` in `.env`.
 
 ## Credits
 
